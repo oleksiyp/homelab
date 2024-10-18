@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rotation-job
+spec:
+  template:
+    spec:
+      serviceAccountName: rotation-job
+      containers:
+        - name: rotation
+          image: ghcr.io/oleksiyp/tools-image:sha-10fd3cb
+          securityContext:
+            readOnlyRootFilesystem: true
+          command:
+            - bash
+            - /tmp/code/rotate.sh
+          workingDir: /tmp
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp
+            - mountPath: /tmp/code
+              name: code
+      volumes:
+        - name: tmp
+          emptyDir:
+            medium: Memory
+            sizeLimit: 512Ki
+        - name: code
+          configMap:
+            name: rotation-job
+      restartPolicy: OnFailure

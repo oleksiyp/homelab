@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+    id 'io.fabric8.java-generator' version "6.13.4"
+}
+
+repositories {
+    mavenCentral()
+}
+
+javaGen {
+    source = file('crd.yaml')
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir "$buildDir/generated/sources"
+        }
+    }
+}
+
+dependencies {
+    implementation 'io.fabric8:kubernetes-client:6.13.4'
+}
+
+compileJava.dependsOn(crd2java)

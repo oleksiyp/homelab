@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: internal-gateway
+spec:
+  secretName: internal-gateway-tls
+  issuerRef:
+    name: internal-ca
+    kind: ClusterIssuer
+  commonName: "int.zengarden.space"
+  dnsNames:
+    - "int.zengarden.space"
+    - "*.int.zengarden.space"
+    - "*.dev.int.zengarden.space"

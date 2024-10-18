@@ -1,0 +1,130 @@
+replicaCount: 1
+
+port: 3000
+
+image:
+  repository: "@IMAGE_REPOSITORY@"
+  pullPolicy: IfNotPresent
+  tag: ""
+
+profiles: []
+
+debug:
+  enabled: false
+  suspend: false
+  port: 12345
+
+tls:
+  enabled: false
+  keystore:
+    keyPassword: changeit
+    password: changeit
+    type: PKCS12
+    key: keystore.p12
+    secretRef:
+      name:
+    issuerRef:
+      kind: ClusterIssuer
+      name:
+  truststore:
+    password: changeit
+    ref:
+      kind: ConfigMap
+      name:
+      key: ca-certificates.p12
+
+env: {}
+envFrom: {}
+
+properties:
+  server:
+    ssl:
+      protocol: TLS
+      enabled-protocol: TLSv1.2
+      ciphers: TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+      key-store-type: PCKS12
+
+secretProperties: {}
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  fsGroup: 2000
+
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port:
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources: {}
+
+livenessProbe:
+  httpGet:
+    path: /actuator/health/liveness
+    port: http
+  initialDelaySeconds: 0
+  periodSeconds: 30
+
+readinessProbe:
+  httpGet:
+    path: /actuator/health/readiness
+    port: http
+  initialDelaySeconds: 0
+  periodSeconds: 30
+
+startupProbe:
+  httpGet:
+    path: /actuator/health/readiness
+    port: http
+  initialDelaySeconds: 0
+  periodSeconds: 1
+  failureThreshold: 30
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+volumes: []
+
+volumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+rbac:
+  roles: {}

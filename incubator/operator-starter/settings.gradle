@@ -1,0 +1,5 @@
+rootProject.name = 'operator-starter'
+
+include 'example:crd'
+include 'example:operator'
+

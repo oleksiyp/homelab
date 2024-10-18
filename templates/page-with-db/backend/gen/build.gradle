@@ -1,0 +1,43 @@
+plugins {
+    id "org.jooq.jooq-codegen-gradle" version "3.19.13"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    jooqCodegen('org.postgresql:postgresql:42.7.3')
+}
+
+jooq {
+    configuration {
+        jdbc {
+            driver = "org.postgresql.Driver"
+            url = "jdbc:postgresql:" + System.getenv("POSTGRES_DB")
+            user = System.getenv("POSTGRES_USER")
+            password = System.getenv("POSTGRES_PASSWORD")
+        }
+    }
+//    jdbc {
+//    }
+
+//    generator {
+//        database {
+//            // org.jooq.meta.postgres.PostgresDatabase
+//            // This value can be used to reverse-engineer schemas defined by Liquibase migration files
+//            // (requires jooq-meta-extensions-liquibase dependency)
+//            //
+//            // org.jooq.meta.extensions.liquibase.LiquibaseDatabase
+//            name = "org.jooq.meta.postgres.PostgresDatabase"
+//            includes = ".*"
+//        }
+//        generate {
+//
+//        }
+//        target {
+//            packageName = "org.jooq.your.packagename"
+//            directory = "/path/to/your/dir"
+//        }
+//    }
+}

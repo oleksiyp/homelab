@@ -1,0 +1,44 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group = 'io.github.oleksiyp'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    withSourcesJar()
+}
+
+sourceCompatibility = 21
+targetCompatibility = 21
+
+dependencies {
+    api 'io.fabric8:kubernetes-client:6.13.4'
+    implementation 'org.springframework.boot:spring-boot-starter:3.3.2'
+    implementation 'org.projectlombok:lombok:1.18.34'
+    annotationProcessor 'org.projectlombok:lombok:1.18.34'
+
+    api 'org.bouncycastle:bcpkix-jdk15on:1.70'
+    api 'org.bouncycastle:bcprov-jdk15on:1.70'
+    api 'org.bouncycastle:bcprov-ext-jdk15on:1.70'
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.3.2'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}

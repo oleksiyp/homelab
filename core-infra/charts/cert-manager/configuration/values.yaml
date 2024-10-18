@@ -1,0 +1,4 @@
+letsEncrypt:
+  account:
+  apiKey:
+  dnsZones:

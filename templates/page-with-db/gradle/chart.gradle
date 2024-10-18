@@ -1,0 +1,44 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+def quote(String s) {
+    return s
+            .replace("\"", "\\\"")
+            .replace("\\", "\\\\")
+            .replace("\n", "\\\n");
+}
+
+task chartCopyTemplate(type: Copy) {
+    group = "deployment"
+    from("configuration")
+    inputs.property("name", project.name)
+    inputs.property("version", project.version)
+    inputs.property("description", project.description ?: "")
+    inputs.property("imageRepository", imageRepository)
+    filter(ReplaceTokens,
+            tokens: [
+                    NAME             : quote(project.name),
+                    VERSION          : quote(project.version.toString()),
+                    DESCRIPTION      : quote(project.description ?: ""),
+                    IMAGE_REPOSITORY : quote(imageRepository)
+            ]
+    )
+    into layout.buildDirectory.file("charts/${project.name}")
+}
+
+task chartBuild(type: Exec) {
+    group = "deployment"
+    dependsOn chartCopyTemplate
+    workingDir layout.buildDirectory.file("charts")
+    commandLine "helm", "package", project.name
+}
+
+task chartInstall(type: Exec) {
+    group = "deployment"
+    dependsOn chartBuild
+    workingDir layout.buildDirectory.file("charts")
+    def args = ["helm", "upgrade", "--install", project.name + "-" + rootProject.name, project.name]
+    if (layout.buildDirectory.file("${project.name}/values-local.yaml").isPresent()) {
+        args += ['--values', "${project.name}/values-local.yaml"]
+    }
+    commandLine args
+}
