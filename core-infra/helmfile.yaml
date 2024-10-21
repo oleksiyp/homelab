@@ -20,6 +20,8 @@ repositories:
     url: https://opensource.zalando.com/postgres-operator/charts/postgres-operator
   - name: postgres-operator-ui-charts
     url: https://opensource.zalando.com/postgres-operator/charts/postgres-operator-ui
+  - name: zitadel
+    url: https://charts.zitadel.com
 
 releases:
   - name: load-balancer
@@ -56,6 +58,9 @@ releases:
       - app:
           trust:
             namespace: infra
+        secretTargets:
+          enabled: true
+          authorizedSecrets: ["internal-ca-bundle"]
     needs:
       - cert-manager
 
@@ -124,6 +129,15 @@ releases:
           - ingress
           - service
 
+  - name: external-gateway-configuration
+    namespace: external-infra
+    chart: charts/external-gateway/configuration
+    values:
+      - values.yaml.gotmpl
+      - {{ .Values | toYaml | nindent 8 }}
+    needs:
+      - infra/cert-manager
+
   - name: external-gateway
     namespace: external-infra
     chart: ingress-nginx/ingress-nginx
@@ -137,6 +151,19 @@ releases:
 
           ingressClassByName: true
           watchIngressWithoutClass: false
+          extraArgs:
+            default-ssl-certificate: external-infra/external-gateway-tls
+
+          extraVolumeMounts:
+            - name: ca-certificates
+              mountPath: /etc/ssl/certs/ca-certificates.crt
+              subPath: ca.crt
+          extraVolumes:
+            - name: ca-certificates
+              configMap:
+                name: internal-ca-bundle
+    needs:
+      - external-gateway-configuration
 
   - name: internal-gateway-configuration
     namespace: infra
@@ -166,7 +193,7 @@ releases:
           extraVolumeMounts:
             - name: ca-certificates
               mountPath: /etc/ssl/certs/ca-certificates.crt
-              subPath: ca-certificates.crt
+              subPath: ca.crt
           extraVolumes:
             - name: ca-certificates
               configMap:
@@ -188,11 +215,11 @@ releases:
           secret: {{ .Values.cloudflare.tunnel.secret | quote }}
           ingress:
             - hostname: {{ .Values.cloudflare.tunnel.host | quote }}
-              service: http://external-gateway-controller.external-infra.svc.cluster.local
+              service: https://external-gateway-controller.external-infra.svc.cluster.local
               originRequest:
                 noTLSVerify: true
             - hostname: {{ printf "*.%s" .Values.cloudflare.tunnel.host | quote }}
-              service: http://external-gateway-controller.external-infra.svc.cluster.local
+              service: https://external-gateway-controller.external-infra.svc.cluster.local
               originRequest:
                 noTLSVerify: true
         resources:
@@ -237,3 +264,85 @@ releases:
           hosts:
             - host: {{ .Values.dbOperator.host | quote }}
               paths: [ {{ .Values.dbOperator.path | quote }} ]
+
+  - name: identity-server-configuration
+    chart: charts/identity-server/configuration
+    namespace: identity-infra
+    values:
+      - values.yaml.gotmpl
+      - {{ .Values | toYaml | nindent 8 }}
+
+  - name: identity-database
+    chart: bitnami/postgresql
+    namespace: identity-infra
+    version: 12.10.0
+    values:
+      - nameOverride: identity-database
+        volumePermissions:
+          enabled: true
+        tls:
+          enabled: true
+          certificatesSecret: identity-database-tls
+          certFilename: "tls.crt"
+          certKeyFilename: "tls.key"
+        auth:
+          postgresPassword: {{ .Values.identityDatabase.adminPassword }}
+    needs:
+      - identity-server-configuration
+
+  - name: identity-server
+    chart: zitadel/zitadel
+    namespace: identity-infra
+    version: 8.5.0
+    values:
+      - nameOverride: identity-server
+        replicaCount: 1
+        ingress:
+          enabled: true
+          className: external
+          annotations:
+            external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+            external-dns.alpha.kubernetes.io/target: "53baf124-f3f5-493e-b20c-318c00aafb01.cfargotunnel.com"
+            nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+          hosts:
+            - host: auth.zengarden.space
+              paths:
+               - path: /
+                 pathType: Prefix
+        zitadel:
+          masterkey: {{ .Values.identityServer.masterKey | quote }}
+          configmapConfig:
+            ExternalDomain: 'auth.zengarden.space'
+            ExternalSecure: true
+            TLS:
+              Enabled: true
+            Database:
+              Postgres:
+                Host: identity-database
+                Port: 5432
+                Database: identity-database
+                MaxOpenConns: 20
+                MaxIdleConns: 10
+                MaxConnLifetime: 30m
+                MaxConnIdleTime: 5m
+                User:
+                  Username: zitadel
+                  SSL:
+                    Mode: verify-full
+                Admin:
+                  Username: postgres
+                  SSL:
+                    Mode: verify-full
+          secretConfig:
+            Database:
+              Postgres:
+                User:
+                  Password: {{ .Values.identityDatabase.userPassword }}
+                Admin:
+                  Password: {{ .Values.identityDatabase.adminPassword }}
+
+          serverSslCrtSecret: identity-server-tls
+          dbSslCaCrtSecret: internal-ca-bundle
+    needs:
+      - identity-database
+      - identity-server-configuration

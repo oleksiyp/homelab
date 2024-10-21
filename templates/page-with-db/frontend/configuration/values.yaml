@@ -28,7 +28,7 @@ tls:
     ref:
       kind: ConfigMap
       name:
-      key: ca-certificates.crt
+      key: ca.crt
 
 env: {}
 

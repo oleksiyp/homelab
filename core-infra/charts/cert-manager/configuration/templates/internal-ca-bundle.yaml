@@ -10,7 +10,9 @@ spec:
         key: "ca.crt"
   target:
     configMap:
-      key: "ca-certificates.crt"
+      key: "ca.crt"
+    secret:
+      key: "ca.crt"
     additionalFormats:
       pkcs12:
-        key: "ca-certificates.p12"
+        key: "ca.p12"

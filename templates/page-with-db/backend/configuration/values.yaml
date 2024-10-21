@@ -31,7 +31,7 @@ tls:
     ref:
       kind: ConfigMap
       name:
-      key: ca-certificates.p12
+      key: ca.p12
 
 env: {}
 envFrom: {}

@@ -29,3 +29,11 @@ harbor:
 dbOperator:
   host: db-operator.int.zengarden.space
   path: /
+
+
+identityDatabase:
+  userPassword:
+  adminPassword:
+
+identityServer:
+  masterKey:

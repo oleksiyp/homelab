@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: identity-database
+spec:
+  secretName: identity-database-tls
+  issuerRef:
+    name: internal-ca
+    kind: ClusterIssuer
+  commonName: "identity-database.identity-infra.svc.cluster.local"
+  dnsNames:
+    - "identity-database.identity-infra.svc.cluster.local"
+    - "identity-database.identity-infra"
+    - "identity-database"
