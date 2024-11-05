@@ -1,0 +1,36 @@
+
+.upload-takeout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+  border: 2px dashed #007bff;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  color: #6c757d;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+  margin: 10px auto;
+  width: 100%;
+  max-width: 500px;
+}
+
+.upload-takeout .dropzone {
+  background-color: white;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: none; /* Remove border for drop zone as outer section has border */
+}
+
+.upload-takeout:hover {
+  background-color: #e2e6ea;
+  border-color: #0056b3;
+}
+
+.upload-takeout button {
+  margin-top: 30px;
+}

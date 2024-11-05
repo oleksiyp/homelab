@@ -1,0 +1,32 @@
+
+configurations {
+    nodeDependency {
+        canBeConsumed = false
+    }
+}
+
+task copyModule() {
+
+}
+
+
+task npmDev() {
+
+}
+
+task npmBuild() {
+
+}
+
+task npmLint() {
+
+}
+
+task npmPreview() {
+
+}
+
+//"dev": "vite",
+//"build": "tsc -b && vite build",
+//"lint": "eslint .",
+//"preview": "vite preview"

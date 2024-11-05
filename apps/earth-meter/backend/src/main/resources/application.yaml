@@ -1,0 +1,17 @@
+spring:
+  mvc:
+    problemdetails:
+      enabled: true
+  jooq:
+    sql-dialect: postgres
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: metrics, health
+  endpoint:
+    health:
+      show-details: "always"
+      probes:
+        enabled: true

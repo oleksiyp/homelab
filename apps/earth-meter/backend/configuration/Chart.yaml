@@ -1,0 +1,6 @@
+apiVersion: v2
+name: "@NAME@"
+description: "@DESCRIPTION@"
+type: application
+version: "@VERSION@"
+appVersion: "@VERSION@"

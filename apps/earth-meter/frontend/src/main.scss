@@ -1,0 +1,186 @@
+$body-bg: #ffffff;
+$body-color: #222;
+
+$dropdown-bg: white;
+$dropdown-link-color: black;
+$dropdown-link-hover-bg: rgba(180, 183, 123, 0.5);
+$dropdown-link-hover-color: white;
+$dropdown-link-active-bg: #b4b77b;
+$dropdown-link-active-color: white;
+$dropdown-box-shadow: rgba(0, 0, 0, 0.5) 0px 0.125rem 0.3125rem 0px;
+$dropdown-border-radius: 0;
+
+
+$font-size-base: 1rem;
+
+$h1-font-size: $font-size-base * 3.5;
+$h2-font-size: $font-size-base * 1.87;
+$h3-font-size: $font-size-base * 1.2;
+$h4-font-size: $font-size-base * 1;
+$h5-font-size: $font-size-base * 0.9;
+$h6-font-size: $font-size-base * 0.8;
+
+$font-family-base: 'Roboto', Arial, Helvetica, sans-serif;
+$font-weight-base: 300;
+
+$modal-content-bg: #fff;
+$modal-content-color: #222;
+$modal-content-border-color: white;
+$modal-content-border-radius: 0;
+$modal-backdrop-opacity: 0;
+$modal-content-border-color: rgba(0, 0, 0, 0.12);
+
+.modal-content {
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 0.125rem 0.3125rem 0px
+}
+
+$close-color: #222;
+
+$headings-font-weight: 600;
+
+$font-weight-light: 100;
+$font-weight-lighter: 100;
+$font-weight-normal: 100;
+$font-weight-bold: 300;
+$font-weight-bolder: 600;
+
+$info: #dfeaf5;
+$primary: #427c99;
+$success: #6a7d39;
+$secondary: #f5f5e8;
+$danger: rgb(170, 0, 0);
+$warning: rgb(256, 256, 150);
+$light: #eae8e6;
+//$dark:
+
+$jumbotron-color: black;
+$jumbotron-bg: #ffffff;
+
+$btn-border-radius: 0;
+$btn-font-weight: 300;
+
+$input-color: #222;
+$input-placeholder-color: rgba(0, 0, 0, 0.3);
+$input-disabled-bg: rgba(255, 255, 255, 0.5);
+$input-group-addon-bg: rgba(0, 0, 0, 0.12);
+$input-font-weight: 300;
+$input-border-radius: 0;
+
+$text-muted: rgba(255, 255, 255, 0.75);
+
+$card-border-color: white;
+$card-color: #222;
+$card-border-radius: 0;
+
+$popover-arrow-color: white;
+$popover-bg: white;
+$popover-border-color: black;
+
+$tooltip-bg: #919191;
+$tooltip-border-radius: 0;
+
+$alert-color-level: 10;
+$alert-bg-level: 2;
+
+$pagination-bg: white;
+$pagination-focus-outline: 2;
+$pagination-color: black;
+$pagination-focus-box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24), 0 17px 50px 0 rgba(0, 0, 0, .19);
+$pagination-line-height: 1;
+$pagination-hover-bg: white;
+$pagination-hover-color: black;
+
+.card-footer {
+  font-weight: 600;
+  text-shadow: none;
+}
+
+@import 'node_modules/bootstrap/scss/bootstrap';
+
+.form-control-sm {
+  box-sizing: border-box;
+  border-radius: 0;
+  margin: 1px;
+}
+
+.form-control-sm:focus {
+  margin: 0;
+  border: 2px solid black;
+  box-shadow: none;
+}
+
+.form-control {
+  box-sizing: border-box;
+  border-radius: 0;
+  margin: 1px;
+}
+
+.form-control:focus {
+  margin: 0;
+  border: 2px solid black;
+  box-shadow: none;
+}
+
+.form-group {
+  display: flex;
+
+  label {
+    width: 200px;
+  }
+
+  .markdown-editor {
+    width: 100%;
+  }
+}
+
+.alert-danger {
+  background-color: rgba(180, 30, 30, 0.8);
+  color: white;
+}
+
+.alert-container {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  right: 0;
+  z-index: 2000;
+}
+
+html {
+  height: 100vh;
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  //  background: white url(bg.jpg) no-repeat 50% fixed / cover;
+  -webkit-background-size: cover;
+}
+
+
+.popover-header {
+  border-bottom: 1px solid white;
+}
+
+pre, code {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.navbar {
+  a {
+    color: #222;
+  }
+
+  a:hover {
+    color: #222;
+  }
+}
+
+.navbar-brand {
+  cursor: pointer;
+}
+
+.octicon {
+  vertical-align: middle !important;
+}

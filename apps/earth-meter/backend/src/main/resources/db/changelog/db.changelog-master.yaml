@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: author
+      changes:
+        - createTable:
+            tableName: walking_history
+            columns:
+              - column:
+                  name: year
+                  type: int
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: month
+                  type: int
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: day
+                  type: int
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: distance
+                  type: int
