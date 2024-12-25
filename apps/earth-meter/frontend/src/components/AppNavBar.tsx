@@ -1,5 +1,5 @@
 import {Button, Container, Nav, Navbar} from "react-bootstrap";
-import Logo from "../zengarden-logo.svg";
+import Logo from "../../public/logo.svg";
 import {BsPerson} from "react-icons/bs";
 import {useAuth} from "../util/auth.ts";
 import "./AppNavBar.scss";
