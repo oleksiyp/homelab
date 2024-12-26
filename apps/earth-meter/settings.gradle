@@ -1,5 +1,0 @@
-
-include 'api'
-include 'backend'
-include 'frontend'
-
